@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='hhcalcs',
       version='0.1',
@@ -7,5 +7,5 @@ setup(name='hhcalcs',
       author='Adam Erispaha',
       author_email='aerispaha@gmail.com',
       license='MIT',
-      packages=['hhcalcs'],
+      packages=find_packages(),
       zip_safe=False)

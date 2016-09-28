@@ -1,3 +1,4 @@
+import math
 #define default hydraulic params
 default_min_slope = 0.01 # percent - assumed when slope is null
 default_TC_slope = 5.0 # percent - conservatively assumed for travel time calculation when slope
@@ -67,6 +68,19 @@ def minSlopeRequired (shape, diameter, height, width, peakQ) :
 		return 0.0
 
 def manningsCapacity(diameter, slope, height=None, width=None, shape="CIR"):
+
+	#if shape is not CIR, EGG, or BOX, make assumption based on geom provided
+	if shape and shape not in ['CIR', 'EGG', 'BOX']:
+		if diameter is not None:
+			shape = 'CIR'
+		elif height is not None:
+
+			if height > 42:
+				shape ='BOX' #assume this is a big box
+			else:
+				shape = 'EGG' #assume egg shape
+	if slope is None:
+		slope = 0.5
 
 	#compute mannings flow in full pipe
 	A = xarea(shape, diameter, height, width)
