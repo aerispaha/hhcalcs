@@ -67,7 +67,23 @@ def minSlopeRequired (shape, diameter, height, width, peakQ) :
 		arcpy.AddWarning("Type error on pipe ")
 		return 0.0
 
-def manningsCapacity(diameter, slope, height=None, width=None, shape="CIR"):
+def manningsVelocity(diameter=None, slope=None, height=None, width=None, shape="CIR"):
+
+	"""
+	returns the velocity of flow in a pipe flowing full
+	"""
+
+	#compute mannings flow in full pipe
+	A = xarea(shape, diameter, height, width)
+	Rh = hydraulicRadius(shape, diameter, height, width)
+	n = getMannings(shape, diameter)
+
+	V = (1.49/ n) * math.pow(Rh, 0.667) * math.pow(float(slope)/100.0, 0.5)
+
+	return V
+
+
+def manningsCapacity(diameter=None, slope=None, height=None, width=None, shape="CIR"):
 
 	#if shape is not CIR, EGG, or BOX, make assumption based on geom provided
 	if shape and shape not in ['CIR', 'EGG', 'BOX']:
@@ -79,8 +95,8 @@ def manningsCapacity(diameter, slope, height=None, width=None, shape="CIR"):
 				shape ='BOX' #assume this is a big box
 			else:
 				shape = 'EGG' #assume egg shape
-	if slope is None:
-		slope = 0.5
+	# if slope is None:
+	# 	slope = 0.5
 
 	#compute mannings flow in full pipe
 	A = xarea(shape, diameter, height, width)
